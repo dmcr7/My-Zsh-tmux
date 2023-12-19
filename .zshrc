@@ -2,13 +2,13 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/dito/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 export TERM="xterm-256color"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel9k/powerlevel9k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 function sp {
   git branch > /dev/null 2>&1 || return 1
   git config user.initials
@@ -176,3 +176,25 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 cowsay "Hi, Dito Prabowo Have A nice Day" | lolcat
+
+session_name="1337"
+
+# 1. First you check if a tmux session exists with a given name.
+tmux has-session -t=$session_name 2> /dev/null
+
+# 2. Create the session if it doesn't exists.
+if [[ $? -ne 0 ]]; then
+  TMUX='' tmux new-session -d -s "$session_name"
+fi
+
+# 3. Attach if outside of tmux, switch if you're in tmux.
+if [[ -z "$TMUX" ]]; then
+  tmux attach -t "$session_name"
+else
+  tmux switch-client -t "$session_name"
+fi
+
+alias pwninit='pwninit --template-path ~/solve.py --template-bin-name elf'
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/platform-tools:$PATH"
+alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.1.1'
